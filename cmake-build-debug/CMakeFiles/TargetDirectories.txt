@@ -1,0 +1,3 @@
+C:/Users/pc/CLionProjects/FlatBaseGTK4/cmake-build-debug/CMakeFiles/Gtk4App.dir
+C:/Users/pc/CLionProjects/FlatBaseGTK4/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/pc/CLionProjects/FlatBaseGTK4/cmake-build-debug/CMakeFiles/rebuild_cache.dir
