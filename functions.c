@@ -99,9 +99,15 @@ int search(const char* id, char *result, size_t result_size) {
             char *temp_alg = strtok(student.algebra, ",");
             char *temp_sfsd = strtok(student.sfsd, ",");
             char *temp_oop = strtok(student.oop, ",");
-
-            snprintf(result, result_size, "Found Student:\nID: %s\n Name: %s\n Group: %s\n BirthYear: %d\n Sfsd: %s\n OOP: %s\n Math: %s\n Algebra: %s\n Average: %.2f\n Flag: %d\n",
-                     student.id, student.name, student.group, student.birthYear, temp_sfsd,temp_oop, temp_math, temp_alg, student.average, student.flag);
+            char flagged[6] = "\0";
+            if (student.flag == 1) {
+                strcpy(flagged, "Yes");
+            }
+            else {
+                strcpy(flagged, "No");
+            }
+            snprintf(result, result_size, "Found Student:\nID: %s\n Name: %s\n Group: %s\n BirthYear: %d\n Sfsd: %s\n OOP: %s\n Math: %s\n Algebra: %s\n Average: %.2f\n Marked as deleted: %s\n",
+                     student.id, student.name, student.group, student.birthYear, temp_sfsd,temp_oop, temp_math, temp_alg, student.average, flagged);
             printf("%s\n", student.group);
             fclose(sfp);  // Close the file before returning
             return 1;  // Student found

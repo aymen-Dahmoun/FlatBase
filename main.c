@@ -290,6 +290,7 @@ static void activate(GtkApplication *app, gpointer user_data) {
     gtk_entry_set_placeholder_text(GTK_ENTRY(textEntryAlgebra), "ALG Note");
     gtk_entry_set_placeholder_text(GTK_ENTRY(textEntryMath), "MATH Note");
 
+
     // Create buttons for each operation
     btnSearch = gtk_button_new_with_label("Search");
     btnMark = gtk_button_new_with_label("mark \\unmark as Deleted");
