@@ -55,7 +55,7 @@ static void on_insert_clicked(GtkButton *button, Buffers *buffers) {
     }
     // Prepare student structure
     if (atoi(birthYear) > 2020 || atoi(birthYear) < 1990) { // birthyear should be between 2020 and 1990
-        gtk_label_set_label(GTK_LABEL(result_buffer), "Please enter a valid birthday");
+        gtk_label_set_label(GTK_LABEL(result_buffer), "Please enter a valid birthyear");
         return; // other wise student won't be inserted and we will have message saying that birthday not valid
     }
     if (atof(math) > 20 || atof(math) < 0 || atof(algebra) < 0 ||atof(algebra) > 20 || atof(oop) > 20 || atof(sfsd) > 20 || atof(sfsd) < 0 || atof(oop) < 0) {
@@ -80,8 +80,6 @@ static void on_save_clicked(GtkButton *button, Buffers *buffers) {
     // in a formated way
     gtk_label_set_label(GTK_LABEL(result_buffer), "Data wes saved"); // we will get message "data was saved"
 }
-
-
 
 // Callback function for the "Mark as deleted" button
 static void on_mark_clicked(GtkButton *button, GtkEntryBuffer *buffer) {
@@ -162,7 +160,7 @@ static void on_modify_clicked(GtkWidget *button, Buffers *buffers) {
     const char *flag = gtk_entry_buffer_get_text(buffers->flagBuffer);  // flag
     if (birthYear[0] != '\0') {
         if (atoi(birthYear) > 2020 || atoi(birthYear) < 1990) {
-            gtk_label_set_label(GTK_LABEL(result_buffer), "Please enter a valid birthday");
+            gtk_label_set_label(GTK_LABEL(result_buffer), "Please enter a valid birthyer");
             return; // again age is between 1990 and 2020
         }
     }
@@ -190,57 +188,57 @@ static void on_modify_clicked(GtkWidget *button, Buffers *buffers) {
  ######
 */
 static void activate(GtkApplication *app, gpointer user_data) {
-    //########
-    // this is the declaration of all our UI elements
-    // you will notice that they are declared as pointers which is similar to
-    // the way we declare UI components in javaScript or Python as objects
     GtkWidget *window, *btnSearch, *btnInsert, *btnSave, *btnExtract, *btnMark, *label;
-    GtkWidget *textEntryId,*grid , *box, *childBox1, *childBox2, *childBox3, *childBox4;
+    GtkWidget *textEntryId, *grid, *box, *childBox1, *childBox2, *childBox3, *childBox4;
     GtkWidget *textEntryName, *textInputGrp, *textEntryYear, *textEntryMark;
     GtkWidget *btnPrepare, *btnExit, *btnOrganise, *btnModify;
-    Buffers *buffers = g_malloc(sizeof(Buffers)); // not necessary but just to avoid memory issues
+    Buffers *buffers = g_malloc(sizeof(Buffers));
     GtkWidget *noteBox, *textEntrySfsd, *textEntryOop, *textEntryMath, *textEntryAlgebra;
 
+    // Load CSS
+    GtkCssProvider *provider = gtk_css_provider_new();
+    gtk_css_provider_load_from_path(provider, "C:/Users/pc/CLionProjects/FlatBaseGTK4/style.css");
+    gtk_style_context_add_provider_for_display(gdk_display_get_default(),
+        GTK_STYLE_PROVIDER(provider),
+        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-    // Create application window and declaring its title and initial size
+    // Create application window
     window = gtk_application_window_new(app);
     gtk_window_set_title(GTK_WINDOW(window), "FlatBase");
-    gtk_window_set_default_size(GTK_WINDOW(window), 700, 600);
+    gtk_window_set_default_size(GTK_WINDOW(window), 800, 600); // Smaller window size
 
-    //create a grid as a parent container for all our UI elements
+    // Create grid
     grid = gtk_grid_new();
-    gtk_widget_set_margin_start(grid, 20);
-    gtk_widget_set_margin_end(grid, 20);
-    gtk_widget_set_margin_top(grid, 20);
-    gtk_widget_set_margin_bottom(grid, 20);
-    gtk_window_set_child(GTK_WINDOW(window), grid); // this line pushes the grid in our window
+    gtk_widget_set_margin_start(grid, 10); // Reduced margin
+    gtk_widget_set_margin_end(grid, 10); // Reduced margin
+    gtk_widget_set_margin_top(grid, 10); // Reduced margin
+    gtk_widget_set_margin_bottom(grid, 10); // Reduced margin
+    gtk_window_set_child(GTK_WINDOW(window), grid);
 
-    // Create a vertical box for our bold app title
+    // Create main box
     box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
-    gtk_widget_set_margin_start(box, 20);
-    gtk_widget_set_margin_end(box, 20);
-    gtk_widget_set_margin_top(box, 20);
-    gtk_widget_set_margin_bottom(box, 20);
-    gtk_grid_attach(GTK_GRID(grid), box, 0, 0, 1, 1); // and pushing it to the grid
+    gtk_widget_set_margin_start(box, 10); // Reduced margin
+    gtk_widget_set_margin_end(box, 10); // Reduced margin
+    gtk_widget_set_margin_top(box, 10); // Reduced margin
+    gtk_widget_set_margin_bottom(box, 10); // Reduced margin
+    gtk_grid_attach(GTK_GRID(grid), box, 0, 0, 1, 1);
 
-    // creating the bold title which will appear at the top of our app
-    label = gtk_label_new("Welcome to FlatBase");
-    const gchar *markup = "<span font='Arial 16' weight='bold'>Welcome to FlatBase</span>";
+    // Create title label
+    label = gtk_label_new(NULL);
+    const char *markup = "<span font='Arial 16' weight='bold'>Welcome to FlatBase</span>";
     gtk_label_set_markup(GTK_LABEL(label), markup);
-    gtk_box_append(GTK_BOX(box), label); // and pushing it into his box (container)
+    gtk_box_append(GTK_BOX(box), label);
 
-    // creating the results label which will help us showing all the results of each button click
-    // in the right side of the window and initialy telling the user that results will be shown here
+    // Create result buffer
     result_buffer = GTK_WIDGET(gtk_label_new("Results will be shown here"));
     gtk_widget_set_size_request(result_buffer, 100, 50);
     gtk_label_set_xalign(GTK_LABEL(result_buffer), 0.5);
     gtk_label_set_yalign(GTK_LABEL(result_buffer), 0.5);
-    // push the result label to the second column of the grid taking it all by his own
     gtk_grid_attach(GTK_GRID(grid), result_buffer, 1, 0, 1, 1);
     gtk_widget_set_hexpand(result_buffer, TRUE);
     gtk_widget_set_vexpand(result_buffer, TRUE);
 
-    // Initialize all the buffers which will hold the entries of the user
+    // Initialize buffers
     buffers->idBuffer = gtk_entry_buffer_new(NULL, 0);
     buffers->nameBuffer = gtk_entry_buffer_new(NULL, 0);
     buffers->birthYearBuffer = gtk_entry_buffer_new(NULL, 0);
@@ -251,23 +249,19 @@ static void activate(GtkApplication *app, gpointer user_data) {
     buffers->algebraBuffer = gtk_entry_buffer_new(NULL, 0);
     buffers->flagBuffer = gtk_entry_buffer_new(NULL, 0);
 
-    // initialize child boxes which will help organizing our UI components
-    childBox1 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 20);
+    // Create child boxes
+    childBox1 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10); // Reduced spacing
+    childBox2 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10); // Reduced spacing
+    childBox3 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5); // Reduced spacing
+    childBox4 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 20); // Reduced spacing
+    noteBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10); // Reduced spacing
+
     gtk_box_append(GTK_BOX(box), childBox1);
-
-    childBox2 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 20);
     gtk_box_append(GTK_BOX(box), childBox2);
-
-    childBox3 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
     gtk_box_append(GTK_BOX(box), childBox3);
-
-    childBox4 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 40);
     gtk_box_append(GTK_BOX(box), childBox4);
 
-    noteBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 20);
-
-
-    // Create text entries for the user to give inputs
+    // Create text entries
     textEntryId = gtk_entry_new_with_buffer(buffers->idBuffer);
     textEntryName = gtk_entry_new_with_buffer(buffers->nameBuffer);
     textInputGrp = gtk_entry_new_with_buffer(buffers->groupBuffer);
@@ -278,8 +272,7 @@ static void activate(GtkApplication *app, gpointer user_data) {
     textEntryMath = gtk_entry_new_with_buffer(buffers->mathBuffer);
     textEntryAlgebra = gtk_entry_new_with_buffer(buffers->algebraBuffer);
 
-    // Add placeholders to each text entry to help user interact easily
-
+    // Set placeholders
     gtk_entry_set_placeholder_text(GTK_ENTRY(textEntryId), "Enter ID");
     gtk_entry_set_placeholder_text(GTK_ENTRY(textEntryName), "Enter Name");
     gtk_entry_set_placeholder_text(GTK_ENTRY(textInputGrp), "Enter Group");
@@ -290,10 +283,9 @@ static void activate(GtkApplication *app, gpointer user_data) {
     gtk_entry_set_placeholder_text(GTK_ENTRY(textEntryAlgebra), "ALG Note");
     gtk_entry_set_placeholder_text(GTK_ENTRY(textEntryMath), "MATH Note");
 
-
-    // Create buttons for each operation
+    // Create buttons
     btnSearch = gtk_button_new_with_label("Search");
-    btnMark = gtk_button_new_with_label("mark \\unmark as Deleted");
+    btnMark = gtk_button_new_with_label("mark/unmark as Deleted");
     btnInsert = gtk_button_new_with_label("Insert");
     btnModify = gtk_button_new_with_label("Modify");
     btnExtract = gtk_button_new_with_label("Extract");
@@ -303,27 +295,54 @@ static void activate(GtkApplication *app, gpointer user_data) {
     btnSave = gtk_button_new_with_label("Save Changes");
 
 
-    // Connect buttons to callback functions defined above
+
+    // Add CSS classes
+    gtk_widget_add_css_class(window, "main-window");
+    gtk_widget_add_css_class(grid, "main-grid");
+    gtk_widget_add_css_class(box, "main-box");
+    gtk_widget_add_css_class(result_buffer, "result-label");
+
+    gtk_widget_add_css_class(btnSearch, "action-button");
+    gtk_widget_add_css_class(btnMark, "action-button");
+    gtk_widget_add_css_class(btnInsert, "primary-button");
+    gtk_widget_add_css_class(btnModify, "primary-button");
+    gtk_widget_add_css_class(btnExtract, "action-button");
+    gtk_widget_add_css_class(btnPrepare, "system-button");
+    gtk_widget_add_css_class(btnExit, "system-button");
+    gtk_widget_add_css_class(btnOrganise, "system-button");
+    gtk_widget_add_css_class(btnSave, "system-button");
+
+    gtk_widget_add_css_class(textEntryId, "text-entry");
+    gtk_widget_add_css_class(textEntryName, "text-entry");
+    gtk_widget_add_css_class(textInputGrp, "text-entry");
+    gtk_widget_add_css_class(textEntryYear, "text-entry");
+    gtk_widget_add_css_class(textEntryMark, "text-entry");
+    gtk_widget_add_css_class(textEntrySfsd, "text-entry");
+    gtk_widget_add_css_class(textEntryOop, "text-entry");
+    gtk_widget_add_css_class(textEntryMath, "text-entry");
+    gtk_widget_add_css_class(textEntryAlgebra, "text-entry");
+
+    // Connect signals
     g_signal_connect(btnSearch, "clicked", G_CALLBACK(on_search_clicked), buffers->idBuffer);
     g_signal_connect(btnMark, "clicked", G_CALLBACK(on_mark_clicked), buffers->idBuffer);
     g_signal_connect(btnInsert, "clicked", G_CALLBACK(on_insert_clicked), buffers);
-    g_signal_connect(btnExtract, "clicked", G_CALLBACK((on_extract_clicked)), buffers->groupBuffer);
+    g_signal_connect(btnExtract, "clicked", G_CALLBACK(on_extract_clicked), buffers->groupBuffer);
     g_signal_connect(btnPrepare, "clicked", G_CALLBACK(on_prepare_clicked), NULL);
     g_signal_connect(btnOrganise, "clicked", G_CALLBACK(on_reset_clicked), NULL);
     g_signal_connect(btnExit, "clicked", G_CALLBACK(on_exit_clicked), window);
     g_signal_connect(btnModify, "clicked", G_CALLBACK(on_modify_clicked), buffers);
     g_signal_connect(btnSave, "clicked", G_CALLBACK(on_save_clicked), NULL);
 
-    // Arrange widgets in childBox1 (Search and Mark as deletedn and ID text entry)
+    // Arrange widgets in childBox1
     gtk_box_append(GTK_BOX(childBox1), textEntryId);
     gtk_box_append(GTK_BOX(childBox1), btnSearch);
     gtk_box_append(GTK_BOX(childBox1), btnMark);
 
-    // Arrange widgets in childBox2 (group text entry and extract button)
+    // Arrange widgets in childBox2
     gtk_box_append(GTK_BOX(childBox2), textInputGrp);
     gtk_box_append(GTK_BOX(childBox2), btnExtract);
 
-    // Arrange widgets in childBox3 (name, birthyear notes entries insert button and modify button)
+    // Arrange widgets in childBox3
     gtk_box_append(GTK_BOX(childBox3), textEntryName);
     gtk_box_append(GTK_BOX(childBox3), textEntryYear);
     gtk_box_append(GTK_BOX(childBox3), textEntryMark);
@@ -331,23 +350,22 @@ static void activate(GtkApplication *app, gpointer user_data) {
     gtk_box_append(GTK_BOX(childBox3), btnInsert);
     gtk_box_append(GTK_BOX(childBox3), btnModify);
 
-
-    //Arange widgets in the last box (prepare, save, reset adn exit buttons)
+    // Arrange widgets in childBox4
     gtk_box_append(GTK_BOX(childBox4), btnPrepare);
     gtk_box_append(GTK_BOX(childBox4), btnSave);
     gtk_box_append(GTK_BOX(childBox4), btnOrganise);
     gtk_box_append(GTK_BOX(childBox4), btnExit);
 
-    // pushing text entries to noteBox which is already pushed inside childbox3
+    // Arrange widgets in noteBox
     gtk_box_append(GTK_BOX(noteBox), textEntrySfsd);
     gtk_box_append(GTK_BOX(noteBox), textEntryOop);
     gtk_box_append(GTK_BOX(noteBox), textEntryMath);
     gtk_box_append(GTK_BOX(noteBox), textEntryAlgebra);
 
-
-    // Show the window
-    gtk_window_present(GTK_WINDOW(window)); //this line will Show the window after running
+    gtk_window_present(GTK_WINDOW(window));
 }
+
+
 // the main function will run our activate function which will eventually leads to running the app
 int main(int argc, char **argv) { // almost all apps made using GTK will have a similar main function
     GtkApplication *app;

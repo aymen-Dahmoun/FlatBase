@@ -106,7 +106,7 @@ int search(const char* id, char *result, size_t result_size) {
             else {
                 strcpy(flagged, "No");
             }
-            snprintf(result, result_size, "Found Student:\nID: %s\n Name: %s\n Group: %s\n BirthYear: %d\n Sfsd: %s\n OOP: %s\n Math: %s\n Algebra: %s\n Average: %.2f\n Marked as deleted: %s\n",
+            snprintf(result, result_size, "Found Student:\n\nID: %s\n\n Name: %s\n\n Group: %s\n\n BirthYear: %d\n\n Sfsd: %s\n\n OOP: %s\n\n Math: %s\n\n Algebra: %s\n\n Average: %.2f\n\n Marked as deleted: %s\n\n",
                      student.id, student.name, student.group, student.birthYear, temp_sfsd,temp_oop, temp_math, temp_alg, student.average, flagged);
             printf("%s\n", student.group);
             fclose(sfp);  // Close the file before returning
@@ -354,13 +354,13 @@ int extract(const char* grp, char* name, size_t size) {
     student stu;
 
     // Initialize name buffer (empty string)
-    name[0] = '\0';  // Ensure the buffer is empty before concatenation
+    name[0] = '\n';  // Ensure the buffer is empty before concatenation
 
     while (fread(&stu, sizeof(student), 1, sfp)) {
         if (strcmp(stu.group, grp) == 0) {  // Check if groups match
             // Simply append the name and newline
             strcat(name, stu.name);
-            strcat(name, "\n");
+            strcat(name, "\n\n");
         }
     }
     fclose(sfp);
@@ -381,10 +381,8 @@ int overWrite() {
 
     student stud;
     while (fread(&stud, sizeof(stud), 1, input_file)) {
-        strcat(stud.sfsd, ",4");
-        strcat(stud.oop, ",3");
-        strcat(stud.math, ",2");
-        strcat(stud.algebra, ",5");
+
+        printf("%s\n%s\n%s\n%s\n", stud.sfsd, stud.oop, stud.math, stud.algebra);
         // Write data in the original text format with a proper float precision for average
         fprintf(output_file, "%s;%s;%d;%s;%s;%s;%s;%s;%.1f;%d\n",
                 stud.id, stud.name, stud.birthYear, stud.group,

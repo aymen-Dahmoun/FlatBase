@@ -32,7 +32,7 @@ static void activate(GtkApplication *app, gpointer user_data) {
     gtk_window_set_title(GTK_WINDOW(window), "Simple App");
     gtk_window_set_default_size(GTK_WINDOW(window), 300, 150);
 
-    box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
+    box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_window_set_child(GTK_WINDOW(window), box);
 
     label = gtk_label_new("");  // Create an empty label initially
